@@ -217,17 +217,24 @@ markers_fsom_plot <- sapply(markers_fsom_plot,
                             function(x){
                               markers$name[which(markers$desc == x)]
                             })
-markers_fsom_colors <- sapply(markers_fsom_plot,
-                              function(x){
-                                colors[as.character(markers$Type[
-                                  which(markers$name == x)])]
-                              })
+markers_fsom_colors <- c("purple1", "deepskyblue","violetred1", "olivedrab1") 
+# markers_fsom_colors <- sapply(markers_fsom_plot,
+#                               function(x){
+#                                 colors[as.character(markers$Type[
+#                                   which(markers$name == x)])]
+#                               })
 
 pdf(file.path(res_dir,"FlowSOM.pdf"))
+  metacluster_colors <-  c("#17c1a5", "#a5cde2", "#1f78b3",
+                         "#b2de8b", "#359e2c", "#fbb3ad",
+                         "#e2191b", "#fdbd6f", "#ff7e01",
+                         "#c9b1d5", "#6b3d99", "#fffc98",
+                         "#b05927", "#e62a89", "#f681bf")
   PlotStars(UpdateNodeSize(fsom$FlowSOM, reset = TRUE, maxNodeSize = 10),
             markers = markers_fsom_plot,
             colorPalette = colorRampPalette(markers_fsom_colors),
             backgroundValues = fsom$metaclustering,
+            backgroundColor = metacluster_colors,
             main = "FlowSOM analysis using 29 markers")
 dev.off()
 
@@ -239,11 +246,16 @@ png(file.path(res_dir, "tSNE_FlowSOM_mapping.png"),
          fsom$FlowSOM$map$mapping[selected,1]],
        main="FlowSOM Clusters", bty="n", axes=F, xlab="", ylab="", pch=19)
  
+  metacluster_colors <-  c("#17c1a5", "#a5cde2", "#1f78b3",
+                           "#b2de8b", "#359e2c", "#fbb3ad",
+                           "#e2191b", "#fdbd6f", "#ff7e01",
+                           "#c9b1d5", "#6b3d99", "#fffc98",
+                           "#b05927", "#e62a89", "#f681bf")
   plot(rtsne$Y,
-       col=RColorBrewer::brewer.pal(10,"Paired")[
+       col=metacluster_colors[
          fsom$metaclustering[fsom$FlowSOM$map$mapping[selected,1]]],
        main="FlowSOM Meta clusters", bty="n", axes=F, xlab="", ylab="", pch=19)
-
+       
 dev.off()
 
 pdf(file.path(res_dir, "FlowSOM_metaclusters_heatmap.pdf"))
